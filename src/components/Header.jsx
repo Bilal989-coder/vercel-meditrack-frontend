@@ -1,23 +1,19 @@
 import React, { useState, useEffect } from "react";
+import { assets } from "../assets/assets";
 
 const Header = () => {
-  const images = [
-    "src/assets/sir.jpg", // Replace with actual image paths
-    "src/assets/sir.jpg",
-    "src/assets/sir.jpg",
-  ];
-  // State to track the current background image index
+  // Store just the image URLs
+  const images = [assets.sir];
+
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  // Use useEffect to change the image index at a regular interval
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImageIndex((prevIndex) =>
         prevIndex === images.length - 1 ? 0 : prevIndex + 1
       );
-    }, 3000); // Change image every 3 seconds
+    }, 3000);
 
-    // Cleanup the interval on component unmount
     return () => clearInterval(interval);
   }, [images.length]);
 
@@ -25,15 +21,15 @@ const Header = () => {
     <div
       className="relative bg-cover bg-center h-[30vh] md:h-[60vh]"
       style={{
-        backgroundImage: `url('${images[currentImageIndex]}')`,
+        backgroundImage: `url(${images[currentImageIndex]})`,
       }}
     >
-
-      {/* Overlay for better text readability */}
+      {/* Optional Overlay */}
       <div className="h-full flex items-center justify-center bg-black bg-opacity-50">
+        {/* You can add text or buttons here */}
       </div>
     </div>
   );
 };
 
-export default Header
+export default Header;
