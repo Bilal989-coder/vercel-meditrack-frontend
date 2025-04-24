@@ -1,0 +1,11 @@
+<svg width="300" height="100" viewBox="0 0 300 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="300" height="100" fill="white"/>
+    
+    <!-- Logo Icon (Medical Cross) -->
+    <rect x="20" y="25" width="20" height="50" fill="#1F2B6C"/>
+    <rect x="5" y="40" width="50" height="20" fill="#159EEC"/>
+    
+    <!-- Meditrack Text -->
+    <text x="70" y="65" font-family="'Poppins', sans-serif" font-size="38" fill="#1F2B6C" font-weight="bold">Medi</text>
+    <text x="158" y="65" font-family="'Poppins', sans-serif" font-size="38" fill="#159EEC" font-weight="bold">track</text>
+</svg>
