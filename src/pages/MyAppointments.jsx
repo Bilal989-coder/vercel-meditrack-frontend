@@ -4,6 +4,7 @@ import { AppContext } from '../context/AppContext'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { assets } from '../assets/assets'
+import FeedbackModal from '../components/FeedbackModal'
 
 const MyAppointments = () => {
 
@@ -33,26 +34,26 @@ const MyAppointments = () => {
         }
     }
 
-   // Fetch Waitlist Data
-const getWaitlist = async () => {
-    try {
-        const { data } = await axios.get(backendUrl +'/api/user/get', { headers: { token } });          
-        setWaitlist(data.waitlistEntries.reverse());
-    //   console.log("Waitlist data:", data);  // Check the data returned
-  
-    //   if (data.success) {
-    //     setWaitlist(data.waitlistEntries.reverse());
-    //   } else {
-    //     toast.error("No waitlist data available.");
-    //   }
-    } catch (error) {
-      console.log("Error fetching waitlist data:", error.response || error.message);
-      toast.error("Failed to fetch waitlist data.");
-    }
-  };
-  
-    
-    
+    // Fetch Waitlist Data
+    const getWaitlist = async () => {
+        try {
+            const { data } = await axios.get(backendUrl + '/api/user/get', { headers: { token } });
+            setWaitlist(data.waitlistEntries.reverse());
+            //   console.log("Waitlist data:", data);  // Check the data returned
+
+            //   if (data.success) {
+            //     setWaitlist(data.waitlistEntries.reverse());
+            //   } else {
+            //     toast.error("No waitlist data available.");
+            //   }
+        } catch (error) {
+            console.log("Error fetching waitlist data:", error.response || error.message);
+            toast.error("Failed to fetch waitlist data.");
+        }
+    };
+
+
+
 
     // Function to cancel appointment Using API
     const cancelAppointment = async (appointmentId) => {
@@ -157,6 +158,11 @@ const getWaitlist = async () => {
                             {item.isCompleted && <button className='sm:min-w-48 py-2 border border-green-500 rounded text-green-500'>Completed</button>}
                             {!item.cancelled && !item.isCompleted && <button onClick={() => cancelAppointment(item._id)} className='text-[#696969] sm:min-w-48 py-2 border rounded hover:bg-red-600 hover:text-white transition-all duration-300'>Cancel appointment</button>}
                             {item.cancelled && !item.isCompleted && <button className='sm:min-w-48 py-2 border border-red-500 rounded text-red-500'>Appointment cancelled</button>}
+                            {item.isCompleted && !item.feedback && (
+                                <div className="mt-6">
+                                    <FeedbackModal appointmentId={item._id} />
+                                </div>
+                            )}
                         </div>
                     </div>
                 ))}
@@ -177,7 +183,7 @@ const getWaitlist = async () => {
                             <p>{item.doctorData.address.line2}</p>
                             <p className=' mt-1'><span className='text-sm text-[#3C3C3C] font-medium'>Date & Time:</span> {slotDateFormat(item.slotDate)}</p>
                         </div>
-                        
+
                     </div>
                 ))}
             </div>
