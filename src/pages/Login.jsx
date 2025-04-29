@@ -11,6 +11,7 @@ const Login = () => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [mrNumber, setMrNumber] = useState(null) // State to store MR number
 
   const navigate = useNavigate()
   const { backendUrl, token, setToken } = useContext(AppContext)
@@ -25,9 +26,11 @@ const Login = () => {
       if (data.success) {
         localStorage.setItem('token', data.token)
         setToken(data.token)
-      } else {
-        toast.error(data.message)
-      }
+        setMrNumber(data.mrNumber) // Save MR number
+        toast.success(`Registration successful! Your MR Number is: ${data.mrNumber}`)
+    } else {
+      toast.error(data.message)
+    }
 
     } else {
 
@@ -75,6 +78,11 @@ const Login = () => {
           ? <p>Already have an account? <span onClick={() => setState('Login')} className='text-primary underline cursor-pointer'>Login here</span></p>
           : <p>Create an new account? <span onClick={() => setState('Sign Up')} className='text-primary underline cursor-pointer'>Click here</span></p>
         }
+        {mrNumber && (
+          <p className='text-green-600 mt-4'>
+            Your MR Number: <strong>{mrNumber}</strong>
+          </p>
+        )}
       </div>
     </form>
   )
