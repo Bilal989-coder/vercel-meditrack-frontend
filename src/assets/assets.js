@@ -1,4 +1,5 @@
 import appointment_img from './appointment_img.png'
+import background_img from './sir.jpg'
 import header_img from './header_img.png'
 import group_profiles from './group_profiles.png'
 import profile_pic from './profile_pic.png'
@@ -41,6 +42,7 @@ import MediTrack_logo from './logo1.svg'
 
 export const assets = {
     appointment_img,
+    background_img,
     header_img,
     group_profiles,
     logo,

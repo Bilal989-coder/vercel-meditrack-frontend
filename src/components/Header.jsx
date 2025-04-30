@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
-import sir1 from "src/assets/sir.jpg";
-import sir2 from "src/assets/sir.jpg";
-import sir3 from "src/assets/sir.jpg";
+import { assets } from "../assets/assets";
+
+const images = [
+  assets.background_img,
+  assets.background_img,
+  assets.background_img,
+];
 
 const Header = () => {
-  const images = [sir1, sir2, sir3];
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
