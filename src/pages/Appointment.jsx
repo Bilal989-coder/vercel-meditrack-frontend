@@ -16,13 +16,27 @@ const Appointment = () => {
     const [docSlots, setDocSlots] = useState([])
     const [slotIndex, setSlotIndex] = useState(0)
     const [slotTime, setSlotTime] = useState('')
- 
+    const [feedbacks, setFeedbacks] = useState([])
 
     const navigate = useNavigate()
 
     const fetchDocInfo = async () => {
         const docInfo = doctors.find((doc) => doc._id === docId)
         setDocInfo(docInfo)
+    }
+
+    const fetchDoctorFeedbacks = async () => {
+        try {
+            const { data } = await axios.get(`${backendUrl}/api/user/all-feedbacks`, {
+                headers: { token }
+            });
+            if (data.success) {
+                const doctorFeedbacks = data.feedbacks.filter(fb => fb.docData?._id === docId);
+                setFeedbacks(doctorFeedbacks);
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     const getAvailableSolts = async () => {
@@ -162,6 +176,7 @@ const Appointment = () => {
     useEffect(() => {
         if (docInfo) {
             getAvailableSolts()
+            fetchDoctorFeedbacks()
         }
     }, [docInfo, slotIndex])
 
@@ -216,6 +231,24 @@ const Appointment = () => {
                 <button onClick={bookAppointment} className='bg-primary text-white text-sm font-light px-20 py-3 rounded-full my-6'>Book an appointment</button>
                 <button onClick={addToWaitlist} className='bg-primary text-white text-sm font-light px-20 py-3 rounded-full my-6 ml-8'>Add to Waitlist</button>    
 
+            </div>
+
+            <div className='mt-12 sm:ml-72 sm:pl-4'>
+                <h2 className='text-2xl font-semibold text-gray-800 mb-4'>Patient Feedback</h2>
+                {feedbacks.length > 0 ? (
+                    <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
+                        {feedbacks.slice(0, 5).map((fb, index) => (
+                            <div key={index} className='bg-white p-4 rounded-lg border shadow-sm'>
+                                <p className='text-gray-800 font-medium'>{fb.userData?.name || "Anonymous"}</p>
+                                <p className='text-sm text-gray-500 italic'>"{fb.feedback}"</p>
+                                <p className='text-yellow-600 font-semibold text-sm mt-1'>Rating: {fb.rating} ⭐</p>
+                                <p className='text-xs text-gray-400'>{new Date(fb.date).toLocaleString()}</p>
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <p className='text-gray-500'>No feedback yet for this doctor.</p>
+                )}
             </div>
 
             {/* Listing Releated Doctors */}
