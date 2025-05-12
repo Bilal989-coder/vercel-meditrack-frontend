@@ -70,6 +70,7 @@ const MyAppointments = () => {
             toast.error(error.message)
         }
     }
+    
 
     const initPay = (order) => {
         const options = {
@@ -168,7 +169,7 @@ const MyAppointments = () => {
                 ))}
             </div>
 
-            <p className='pb-3 mt-12 text-lg font-medium text-gray-600 border-b'>My Waitlist Appointments</p>
+            <p className='pb-3 mt-12 text-lg font-medium text-gray-600 border-b'>My Waitlist Appointments</p> 
             <div className=''>
                 {waitlist.map((item, index) => (
                     <div key={index} className='grid grid-cols-[1fr_2fr] gap-4 sm:flex sm:gap-6 py-4 border-b'>

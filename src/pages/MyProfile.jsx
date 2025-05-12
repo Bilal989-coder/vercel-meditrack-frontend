@@ -67,6 +67,11 @@ const MyProfile = () => {
             <hr className='bg-[#ADADAD] h-[1px] border-none' />
 
             <div>
+                <p className='text-gray-600 underline mt-3'>ACCOUNT INFORMATION</p>
+                <div className='grid grid-cols-[1fr_3fr] gap-y-2.5 mt-3 text-[#363636]'>
+                    <p className='font-medium'>MR Number:</p>
+                    <p className='text-blue-500'>{userData.mrNumber}</p> {/* Display MR Number */}
+                </div>
                 <p className='text-gray-600 underline mt-3'>CONTACT INFORMATION</p>
                 <div className='grid grid-cols-[1fr_3fr] gap-y-2.5 mt-3 text-[#363636]'>
                     <p className='font-medium'>Email id:</p>
