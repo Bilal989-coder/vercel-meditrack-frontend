@@ -1,10 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 import { AppContext } from '../context/AppContext'
+
 const RelatedDoctors = ({ speciality, docId }) => {
 
+    const [feedbacks, setFeedbacks] = useState([]);
+    const [avgRatings, setAvgRatings] = useState({});
     const navigate = useNavigate()
-    const { doctors } = useContext(AppContext)
+    const { doctors ,backendUrl,token} = useContext(AppContext)
 
     const [relDoc, setRelDoc] = useState([])
 
@@ -14,6 +18,50 @@ const RelatedDoctors = ({ speciality, docId }) => {
             setRelDoc(doctorsData)
         }
     }, [doctors, speciality, docId])
+
+    useEffect(() => {
+        const fetchFeedbacks = async () => {
+          try {
+            const { data } = await axios.get(backendUrl + '/api/user/all-feedbacks', {
+              headers: { token }
+            });
+    
+            if (data.success && Array.isArray(data.feedbacks)) {
+              const feedbackList = data.feedbacks;
+              setFeedbacks(feedbackList);
+    
+              // Step 1: Group feedbacks by doctor ID
+              const grouped = {};
+    
+              feedbackList.forEach(fb => {
+                const docId = fb.docData?._id;
+                if (!docId) return;
+    
+                if (!grouped[docId]) {
+                  grouped[docId] = { total: fb.rating, count: 1 };
+                } else {
+                  grouped[docId].total += fb.rating;
+                  grouped[docId].count += 1;
+                }
+              });
+    
+              // Step 2: Compute averages
+              const avg = {};
+              Object.keys(grouped).forEach(docId => {
+                avg[docId] = (grouped[docId].total / grouped[docId].count).toFixed(1);
+              });
+    
+              setAvgRatings(avg);
+            } else {
+              console.warn("❌ Invalid feedback data", data);
+            }
+          } catch (err) {
+            console.error("❌ Failed to fetch feedbacks:", err);
+          }
+        };
+    
+        fetchFeedbacks();
+      }, [backendUrl]);
 
     return (
         <div className='flex flex-col items-center gap-4 my-16 text-gray-900'>
@@ -29,6 +77,15 @@ const RelatedDoctors = ({ speciality, docId }) => {
                             </div>
                             <p className='text-gray-900 text-lg font-medium'>{item.name}</p>
                             <p className='text-gray-600 text-sm'>{item.speciality}</p>
+                            {/* ⭐ Show average rating as stars */}
+                            {avgRatings[item._id] ? (
+                                <div className="mt-2 text-yellow-500 text-sm font-medium">
+                                    {"★".repeat(Math.round(avgRatings[item._id])) + "☆".repeat(5 - Math.round(avgRatings[item._id]))}
+                                    <span className="text-gray-600 ml-1">({avgRatings[item._id]})</span>
+                                </div>
+                            ) : (
+                                <div className="mt-2 text-gray-400 text-sm italic">No ratings yet</div>
+                            )}
                         </div>
                     </div>
                 ))}
