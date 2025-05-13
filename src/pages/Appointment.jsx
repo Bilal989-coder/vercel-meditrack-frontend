@@ -27,7 +27,7 @@ const Appointment = () => {
 
     const fetchDoctorFeedbacks = async () => {
         try {
-            const { data } = await axios.get(`${backendUrl}/api/user/all-feedbacks`, {
+            const { data } = await axios.get(backendUrl + '/api/user/all-feedbacks', {
                 headers: { token }
             });
             if (data.success) {
